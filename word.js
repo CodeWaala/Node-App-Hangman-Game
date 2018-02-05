@@ -9,14 +9,26 @@ function Word(word){
             wordformat = wordformat + " " +  item.returnCharacter();
 
         }); 
-        console.log(wordformat);          
+        //console.log(wordformat);  
+        return wordformat;        
     };
     this.passCharacter = function(character){
         // call updateGuessed(character);
         this.letterarray.forEach(function(item,index){
-            item.updateGuessed(character);
+           item.updateGuessed(character);
         });
-    
+       
+    };
+
+    this.checkLetter = function(character) {
+       var toreturn = 0;
+       this.letterarray.forEach(function(item,index) {
+           if(item.letter == character) {
+               return toreturn++;
+           }
+       });
+
+       return toreturn;
     };
 }
 

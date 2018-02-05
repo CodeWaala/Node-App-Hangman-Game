@@ -1,16 +1,24 @@
 var Word = require('./word');
 var inquirer = require('inquirer');
+const chalk = require('chalk');
 
-var countries = ["BULGARIA", "ROMANIA", "AUSTRALIA", "CHILE", "BRAZIL", "CANADA", "SPAIN", "INDIA", "AFGHANISTAN", "ALBANIA", "ALGERIA", "ARGENTINA", "AUSTRALIA", "AZERBAIJAN","BELGIUM","BOLIVIA", "BRAZIL","CAMBODIA", "CHAD", "DENMARK"];
+var lives;
+var randomword;
+var WordCons;
 
-var randomword = getRandomCountry();
+var countries = ["BULGARIA", "ROMANIA", "AUSTRALIA", "CHILE", "BRAZIL", "CANADA", "SPAIN", "INDIA", "AFGHANISTAN", "ALBANIA", "ALGERIA", "ARGENTINA", "AUSTRALIA", "AZERBAIJAN", "BELGIUM", "BOLIVIA", "BRAZIL", "CAMBODIA", "CHAD", "DENMARK"];
 
-var WordCons = new Word(randomword);
-var count = 0;
-var lives = 10;
+function setPlay() {
+    randomword = getRandomCountry();
+    WordCons = new Word(randomword);
+    var count = 0;
+    lives = 10;
+    var guessed = [];
+}
+
 
 var continueGame = function () {
-    if (count < randomword.length) {
+    if (lives != 0) {
         inquirer.prompt([
             {
                 name: 'name',
@@ -19,19 +27,50 @@ var continueGame = function () {
         ]).then(function (answers) {
 
             WordCons.passCharacter(answers.name.toUpperCase());
-            WordCons.word();            
-            //console.log(WordCons.word());
-            count++;
+            //console.log(checkletter);
+            // Check letter guessed
+            var checkletter = WordCons.checkLetter(answers.name.toUpperCase());
+            if (checkletter > 0) {
+                console.log(chalk.bold.green("Correct !!"));
+                console.log("**********")
+            } else {
+                console.log(chalk.bold.red("InCorrect !!"));
+                console.log("**********")
+                lives--;
+                console.log(chalk.bold.red("lives left" + " " + lives));
+            }
+
+            console.log(WordCons.word());
+            checkWordGuessed(WordCons.word());
             continueGame();
+
         });
+    }
+    else {
+        console.log("\nGame Over");
     }
 }
 
 function getRandomCountry() {
-
     return countries[Math.floor(Math.random() * countries.length)];
-    
 }
 
+function checkWordGuessed(checkword) {
+    var guessword = checkword.split('_').join('').replace(/\s/g, '');
+    //console.log(guessword.replace(/\s/g, ''));
+    //console.log(randomword);
+    if (randomword == guessword) {
+        //reset lives and game
+        console.log(chalk.bold.green("You Win!! Lets Continue"))
+        resetGame();
+    }
+}
+
+function resetGame() {
+    setPlay();
+    //continueGame();
+}
+
+setPlay();
 continueGame();
 

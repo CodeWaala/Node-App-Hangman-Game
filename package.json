@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/CodeWaala/Node-App-Hangman-Game#readme",
   "dependencies": {
+    "chalk": "^2.3.0",
+    "color": "^3.0.0",
     "inquirer": "^5.0.1"
   }
 }
